@@ -1,6 +1,7 @@
 package me.infernity.polarissfaddons;
 
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -35,19 +36,28 @@ public class PolarisSFAddons extends JavaPlugin implements SlimefunAddon {
         NamespacedKey itemGroupId = new NamespacedKey(this, "polaris_addons");
         ItemGroup itemGroup = new ItemGroup(itemGroupId, itemGroupItem);
 
-        SlimefunItemStack polariumSlimefunItem = new SlimefunItemStack("POLARIUM", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI5ZGE0ODVjZTU1MDRiOGI5OTY5NjEwYjRjMDdmNzVmZTYxODkyNGZlYWRhOWI0MDZlZmJlMWVlZWRkMzJjNSJ9fX0=", "&4Polarium", "", "&7A strong ore.");
+        SlimefunItemStack polariumSlimefunItemStack = new SlimefunItemStack("POLARIUM", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI5ZGE0ODVjZTU1MDRiOGI5OTY5NjEwYjRjMDdmNzVmZTYxODkyNGZlYWRhOWI0MDZlZmJlMWVlZWRkMzJjNSJ9fX0=", "&4Polarium", "", "&7A strong ore.");
 
 //        ItemStack[] polariumRecipe = { new ItemStack(Material.EMERALD) , null                            , new ItemStack(Material.EMERALD),
 //                                       null                            , new ItemStack(Material.DIAMOND) , null,
 //                                       new ItemStack(Material.EMERALD) , null                            , new ItemStack(Material.EMERALD) };
 
-        SlimefunItem polariumItem = new SlimefunItem(itemGroup, polariumSlimefunItem, RecipeType.GEO_MINER, new ItemStack[9]);
-        polariumItem.register(this);
+        SlimefunItem polariumSlimefunItem = new SlimefunItem(itemGroup, polariumSlimefunItemStack, RecipeType.GEO_MINER, new ItemStack[9]);
+        polariumSlimefunItem.register(this);
 
-        PolariumResource polariumGEOResource = new PolariumResource(this, polariumSlimefunItem, 22, 0, 4, 0, 12);
+        PolariumResource polariumGEOResource = new PolariumResource(this, polariumSlimefunItemStack, 22, 0, 4, 0, 12);
         polariumGEOResource.register();
 
         ResearchPlus polariumResearch = new ResearchPlus(this, "polarium", 1972216001, "Polarium", 10);
+
+        SlimefunItemStack polariumAlloySFItemStack = new SlimefunItemStack("POLARIUM_ALLOY_STEEL", Material.IRON_INGOT, "&4Polarium Steel", "", "&7A semi-magical strong material.");
+
+        ItemStack[] polariumAlloyRecipe = { polariumSlimefunItemStack, SlimefunItems.STEEL_INGOT, SlimefunItems.BRASS_INGOT, null, null, null, null, null, null};
+
+        SlimefunItem polariumSlimefunAlloyItem = new SlimefunItem(itemGroup, polariumAlloySFItemStack, RecipeType.SMELTERY, polariumAlloyRecipe);
+        polariumSlimefunAlloyItem.register(this);
+
+
     }
 
     @Override

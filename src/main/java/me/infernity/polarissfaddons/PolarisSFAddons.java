@@ -31,17 +31,11 @@ public class PolarisSFAddons extends JavaPlugin implements SlimefunAddon {
             // You could start an Auto-Updater for example
         }*/
 
-        /*
-         * 1. Creating a new Category
-         * This Category will use the following ItemStack
-         */
         ItemStack itemGroupItem = new CustomItemStack(Material.OAK_LOG, "&4Polaris Addons", "", "&a> Click to open");
-
-        // Give your Category a unique id.
         NamespacedKey itemGroupId = new NamespacedKey(this, "polaris_addons");
         ItemGroup itemGroup = new ItemGroup(itemGroupId, itemGroupItem);
 
-        SlimefunItemStack polariumSlimefunItem = new SlimefunItemStack("POLARIUM", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI5ZGE0ODVjZTU1MDRiOGI5OTY5NjEwYjRjMDdmNzVmZTYxODkyNGZlYWRhOWI0MDZlZmJlMWVlZWRkMzJjNSJ9fX0=", "&4Polarium", "", "&7A strong alloy, seemingly specific to this region...");
+        SlimefunItemStack polariumSlimefunItem = new SlimefunItemStack("POLARIUM", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDI5ZGE0ODVjZTU1MDRiOGI5OTY5NjEwYjRjMDdmNzVmZTYxODkyNGZlYWRhOWI0MDZlZmJlMWVlZWRkMzJjNSJ9fX0=", "&4Polarium", "", "&7A strong ore.");
 
 //        ItemStack[] polariumRecipe = { new ItemStack(Material.EMERALD) , null                            , new ItemStack(Material.EMERALD),
 //                                       null                            , new ItemStack(Material.DIAMOND) , null,
@@ -50,12 +44,10 @@ public class PolarisSFAddons extends JavaPlugin implements SlimefunAddon {
         SlimefunItem polariumItem = new SlimefunItem(itemGroup, polariumSlimefunItem, RecipeType.GEO_MINER, new ItemStack[9]);
         polariumItem.register(this);
 
-        PolariumResource polariumResource = new PolariumResource(this, polariumSlimefunItem);
-        polariumResource.register();
+        PolariumResource polariumGEOResource = new PolariumResource(this, polariumSlimefunItem, 22, 0, 4, 0, 12);
+        polariumGEOResource.register();
 
-        NamespacedKey polariumResearchKey = new NamespacedKey(this, "polarium");
-        Research polariumResearch = new Research(polariumResearchKey, 1972216001, "Polarium", 10);
-        polariumResearch.register();
+        ResearchPlus polariumResearch = new ResearchPlus(this, "polarium", 1972216001, "Polarium", 10);
     }
 
     @Override
@@ -86,32 +78,46 @@ public class PolarisSFAddons extends JavaPlugin implements SlimefunAddon {
 
     }
 
+    public static class ResearchPlus extends Research {
+
+        public ResearchPlus(Plugin plugin, String key, int id, String name, int cost) {
+            super(new NamespacedKey(plugin, key), id, name, cost);
+            super.register();
+        }
+    }
+
     public static class PolariumResource implements GEOResource {
 
         private final NamespacedKey key;
         private final ItemStack item;
+        private final int overworldSupply, hellSupply, endSupply, backupSupply, deviation;
 
-        public PolariumResource(Plugin plugin, ItemStack item){
+        public PolariumResource(Plugin plugin, ItemStack item, int overworldSupply, int hellSupply, int endSupply, int backupSupply, int deviation){
             this.key = new NamespacedKey(plugin, "polarium");
             this.item = item;
+            this.overworldSupply = overworldSupply;
+            this.hellSupply = hellSupply;
+            this.endSupply = endSupply;
+            this.backupSupply = backupSupply;
+            this.deviation = deviation;
         }
 
         @Override
         public int getDefaultSupply(World.Environment environment, Biome biome) {
             switch (environment) {
                 case THE_END:
-                    return 1;
+                    return endSupply;
                 case NORMAL:
-                    return 12;
+                    return overworldSupply;
                 case NETHER:
-                    return 0;
+                    return hellSupply;
             }
-            return 0; // just in case
+            return backupSupply; // just in case
         }
 
         @Override
         public int getMaxDeviation() {
-            return 15;
+            return deviation;
         }
 
         @Override
